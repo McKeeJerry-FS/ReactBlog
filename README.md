@@ -69,3 +69,34 @@ Husky is not required in this setup. Commitlint is still available from `backend
 cd backend
 npm run commitlint
 ```
+
+## Docker quickstart
+
+Use Docker Compose from the project root:
+
+```bash
+docker compose build
+docker compose up -d
+```
+
+Service URLs:
+
+- Frontend: `http://localhost:3001`
+- Backend API: `http://localhost:3000/api/v1/posts`
+- MongoDB: `mongodb://localhost:27017`
+
+Useful Docker commands:
+
+```bash
+# Show service status
+docker compose ps
+
+# Stream logs
+docker compose logs -f
+
+# Stop and remove containers/network
+docker compose down
+
+# Optional: also remove named/anonymous volumes
+docker compose down -v
+```
