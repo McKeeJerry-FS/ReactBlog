@@ -5,6 +5,7 @@ import { Post } from './Post';
 export function PostList({ posts = [] }) {
     return (
         <div>
+            <h2>Posts</h2>
             {posts.map((post) => (
                 <Fragment key={post._id}>
                     <Post {...post} />
