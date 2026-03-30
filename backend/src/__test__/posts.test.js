@@ -58,7 +58,7 @@ describe('listing posts', () => {
   })
   test('should return posts by creation date in descending order by default', async () => {
     const posts = await listAllPosts()
-    const sortedSamplePosts = createdSamplePosts.toSorted(
+    const sortedSamplePosts = [...createdSamplePosts].sort(
       (a, b) => b.createdAt - a.createdAt,
     )
     expect(posts.map((post) => post.createdAt)).toEqual(
@@ -70,7 +70,7 @@ describe('listing posts', () => {
       sortBy: 'createdAt',
       sortOrder: 'ascending',
     })
-    const sortedSamplePosts = createdSamplePosts.toSorted(
+    const sortedSamplePosts = [...createdSamplePosts].sort(
       (a, b) => a.createdAt - b.createdAt,
     )
     expect(posts.map((post) => post.updatedAt)).toEqual(
