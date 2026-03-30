@@ -1,11 +1,13 @@
 name: Deploy Blog Application
-on: 
+on:
   push:
     branches:
       - main
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
     environment:
       name: production
       url: ${{ steps.deploy-frontend.outputs.url }}
@@ -21,12 +23,12 @@ jobs:
           service_account: ${{ secrets.GOOGLECLOUD_SERVICE_ACCOUNT }}
           credentials_json: ${{ secrets.GOOGLECLOUD_CREDENTIALS }}
       - name: Build and Push backend image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: ./backend
-          files: ./backend/Dockerfile
+          file: ./backend/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/blogv2-backend:latest
+          tags: ${{ env.DOCKER_USERNAME }}/blogv2-backend:latest
       - id: deploy-backend
         name: Deploy backend
         uses: google-github-actions/deploy-cloudrun@v1
@@ -38,11 +40,11 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          files: ./Dockerfile
+          file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/blogv2-frontend:latest
+          tags: ${{ env.DOCKER_USERNAME }}/blogv2-frontend:latest
           build-args: |
-            VITE_BACKEND_URL=https://${{ steps.deploy-backend.outputs.url }}/api/v1
+            VITE_BACKEND_URL=${{ steps.deploy-backend.outputs.url }}/api/v1
       - id: deploy-frontend
         name: Deploy frontend
         uses: google-github-actions/deploy-cloudrun@v1
