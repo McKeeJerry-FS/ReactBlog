@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode'
 import { useAuth } from '../contexts/AuthContect'
 import { User } from './User.jsx'
 
 export function Header() {
   const { token, setToken } = useAuth()
+  const navigate = useNavigate()
   if (token) {
     const { userId } = jwtDecode(token)
     return (
@@ -19,8 +20,8 @@ export function Header() {
 
   return (
     <div>
-      <Link to='/signup'>Sign Up</Link>
-      <Link to='/login'>Log In</Link>
+      <button onClick={() => navigate('/signup')}>Sign Up</button>
+      <button onClick={() => navigate('/login')}>Log In</button>  
     </div>
   )
 }
