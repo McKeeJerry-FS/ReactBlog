@@ -8,7 +8,11 @@ export const signup = async ({ username, password }) => {
     },
     body: JSON.stringify({ username: normalizedUsername, password }),
   })
-  if (!res.ok) throw new Error('Signup failed')
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null)
+    const errorMessage = errorBody?.error || 'Signup failed'
+    throw new Error(`${errorMessage} (HTTP ${res.status})`)
+  }
   return await res.json()
 }
 
@@ -22,7 +26,11 @@ export const login = async ({ username, password }) => {
     },
     body: JSON.stringify({ username: normalizedUsername, password }),
   })
-  if (!res.ok) throw new Error('Login failed')
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null)
+    const errorMessage = errorBody?.error || 'Login failed'
+    throw new Error(`${errorMessage} (HTTP ${res.status})`)
+  }
   return await res.json()
 }
 

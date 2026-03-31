@@ -16,7 +16,7 @@ export function Login() {
       setToken(data.token)
       navigate('/')
     },
-    onError: () => alert('Login failed'),
+    onError: (error) => alert(error.message),
   })
 
   const handleSubmit = (e) => {
