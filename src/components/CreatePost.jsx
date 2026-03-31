@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { useAuth } from '../contexts/AuthContect';
+import { useAuth } from '../contexts/AuthContect'
 import { createPost } from '../api/posts'
 
 export function CreatePost() {
-  const [token] = useAuth();
+  const { token } = useAuth()
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
 
   const queryClient = useQueryClient()
   const createPostMutation = useMutation({
-    mutationFn: createPost,
+    mutationFn: ({ token, post }) => createPost(token, post),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] })
       setTitle('')
@@ -18,9 +18,9 @@ export function CreatePost() {
     },
   })
 
-  const handleSubmit = (e) => {``
+  const handleSubmit = (e) => {
     e.preventDefault()
-    createPostMutation.mutate(token, { title, content })
+    createPostMutation.mutate({ token, post: { title, content } })
   }
   if (!token) return <div>Please log in to create a post.</div>
   return (
