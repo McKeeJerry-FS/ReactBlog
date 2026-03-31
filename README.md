@@ -1,3 +1,5 @@
+[![Deploy Blog Application](https://github.com/McKeeJerry-FS/ReactBlog/actions/workflows/cd.yaml/badge.svg)](https://github.com/McKeeJerry-FS/ReactBlog/actions/workflows/cd.yaml)
+
 # ReactBlog Local Setup
 
 This project runs as two local apps:
