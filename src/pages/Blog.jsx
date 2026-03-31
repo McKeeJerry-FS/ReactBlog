@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { PostList } from './components/PostList';
-import { CreatePost } from './components/CreatePost';
-import { PostFilter } from './components/PostFilter';
-import { PostSorting } from './components/PostSorting';
-import { getPosts } from './api/posts';
+import { PostList } from '../components/PostList';
+import { CreatePost } from '../components/CreatePost';
+import { PostFilter } from '../components/PostFilter';
+import { PostSorting } from '../components/PostSorting';
+import { getPosts } from '../api/posts';
+import { Header } from '../components/Header';
 
 
 export function Blog() {
@@ -21,6 +22,10 @@ export function Blog() {
 
   return (
     <div style={{ padding: 8 }}>
+      <Header />
+      <br />
+      <hr />
+      <br />
       <CreatePost />
       <br />
       <hr />

@@ -1,8 +1,8 @@
-import { app } from './app.js'
 import dotenv from 'dotenv'
+dotenv.config()
+import { app } from './app.js'
 import { initDatabase } from './db/init.js'
 
-dotenv.config()
 
 const PORT = process.env.PORT || 8080
 

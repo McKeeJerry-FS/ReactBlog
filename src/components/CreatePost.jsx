@@ -1,10 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useAuth } from '../contexts/AuthContect';
 import { createPost } from '../api/posts'
 
 export function CreatePost() {
+  const [token] = useAuth();
   const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
   const [content, setContent] = useState('')
 
   const queryClient = useQueryClient()
@@ -13,16 +14,15 @@ export function CreatePost() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] })
       setTitle('')
-      setAuthor('')
       setContent('')
     },
   })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e) => {``
     e.preventDefault()
-    createPostMutation.mutate({ title, author, content })
+    createPostMutation.mutate(token, { title, content })
   }
-
+  if (!token) return <div>Please log in to create a post.</div>
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -36,17 +36,6 @@ export function CreatePost() {
           name='create-title'
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-        />
-      </div>
-      <br />
-      <div>
-        <label htmlFor='create-author'>Author</label>
-        <input
-          id='create-author'
-          type='text'
-          name='create-author'
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
         />
       </div>
       <br />
