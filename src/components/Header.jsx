@@ -13,6 +13,7 @@ export function Header() {
         <span>
           Welcome, <User id={userId} />!
         </span>
+        <br />
         <button onClick={() => setToken(null)}>Log Out</button>
       </div>
     )
