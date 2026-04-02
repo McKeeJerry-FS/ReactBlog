@@ -47,7 +47,11 @@ export function postsRoutes(app) {
   // POST Routes for posts
   app.post('/api/v1/posts', requireAuth, async (req, res) => {
     try {
-      const post = await createPost(req.auth.sub, req.body)
+      const userId = req.auth?.sub || req.auth?.userId
+      if (!userId) {
+        return res.status(401).json({ error: 'Authentication is required' })
+      }
+      const post = await createPost(userId, req.body)
       return res.status(201).json(post)
     } catch (err) {
       console.error('Error creating post:', err)
@@ -58,7 +62,11 @@ export function postsRoutes(app) {
   // PATCH Routes for posts
   app.patch('/api/v1/posts/:id', requireAuth, async (req, res) => {
     try {
-      const post = await updatePost(req.auth.sub, req.params.id, req.body)
+      const userId = req.auth?.sub || req.auth?.userId
+      if (!userId) {
+        return res.status(401).json({ error: 'Authentication is required' })
+      }
+      const post = await updatePost(userId, req.params.id, req.body)
       return res.json(post)
     } catch (err) {
       console.error('Error updating post:', err)
@@ -69,7 +77,11 @@ export function postsRoutes(app) {
   // DELETE Routes for posts
   app.delete('/api/v1/posts/:id', requireAuth, async (req, res) => {
     try {
-      const { deletedCount } = await deletePost(req.auth.sub, req.params.id)
+      const userId = req.auth?.sub || req.auth?.userId
+      if (!userId) {
+        return res.status(401).json({ error: 'Authentication is required' })
+      }
+      const { deletedCount } = await deletePost(userId, req.params.id)
       if (deletedCount === 0) return res.sendStatus(400)
       return res.status(204).end()
     } catch (err) {

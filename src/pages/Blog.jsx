@@ -6,6 +6,7 @@ import { PostFilter } from '../components/PostFilter';
 import { PostSorting } from '../components/PostSorting';
 import { getPosts } from '../api/posts';
 import { Header } from '../components/Header';
+import { Helmet } from 'react-helmet-async';
 
 
 export function Blog() {
@@ -22,6 +23,13 @@ export function Blog() {
 
   return (
     <div style={{ padding: 8 }}>
+      <Helmet>
+        <title>Home - Full Stack React Blog</title>
+        <meta 
+          name="description"
+          content="A blog full of articles about React, Node.js, and full stack development."
+        />
+      </Helmet>
       <Header />
       <br />
       <hr />

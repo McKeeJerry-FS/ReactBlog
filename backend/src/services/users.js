@@ -37,9 +37,16 @@ export async function loginUser({ username, password }) {
     throw new Error('JWT secret is not configured')
   }
 
-  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-    expiresIn: '24h',
-  })
+  const token = jwt.sign(
+    {
+      sub: user._id.toString(),
+      userId: user._id.toString(),
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '24h',
+    },
+  )
   return { token }
 }
 
