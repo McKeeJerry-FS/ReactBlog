@@ -10,6 +10,7 @@ FROM node:20-slim AS final
 WORKDIR /app
 COPY --from=build /build/dist ./dist
 COPY --from=build /build/server.js ./server.js
+COPY --from=build /build/generateSitemap.js ./generateSitemap.js
 COPY --from=build /build/package.json ./package.json
 RUN npm install --omit=dev --ignore-scripts --package-lock=false
 ENV NODE_ENV=production
