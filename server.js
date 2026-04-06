@@ -1,90 +1,104 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import express from 'express';
-import dotenv from 'dotenv';
-import { generateSitemap } from './generateSitemap.js';
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import express from 'express'
+import dotenv from 'dotenv'
+import { generateSitemap } from './generateSitemap.js'
 
-dotenv.config();
+dotenv.config()
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 async function createProdServer() {
-    const app = express();
-    app.use((await import('compression')).default());
-    app.use((await import('serve-static')).default(path.resolve(__dirname, 'dist/client'), {
+  const app = express()
+  app.use((await import('compression')).default())
+  app.use(
+    (await import('serve-static')).default(
+      path.resolve(__dirname, 'dist/client'),
+      {
         index: false,
-    }))
-    app.use('*', async (req, res, next) => {
-        if (req.originalUrl === '/sitemap.xml') {
-            const sitemap = await generateSitemap();
-            return res
-                .status(200)
-                .set({ 'Content-Type': 'application/xml' })
-                .end(sitemap);
-        }
-        try {
-            let template = fs.readFileSync(
-                path.resolve(__dirname, 'dist/client/index.html'),
-                'utf-8',
-            )
-            const { render } = await import('./dist/server/entry-server.js');
-            const appHtml = await render(req);
-            const html = template.replace(`<!--ssr-outlet-->`, appHtml);
-            res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
-        } catch (err) {
-            next(err)
-        }
-    })
-    return app
+      },
+    ),
+  )
+  app.use('*', async (req, res, next) => {
+    if (req.originalUrl === '/sitemap.xml') {
+      const sitemap = await generateSitemap()
+      return res
+        .status(200)
+        .set({ 'Content-Type': 'application/xml' })
+        .end(sitemap)
+    }
+    try {
+      let template = fs.readFileSync(
+        path.resolve(__dirname, 'dist/client/index.html'),
+        'utf-8',
+      )
+      const { render } = await import('./dist/server/entry-server.js')
+      const { html: appHtml, helmet } = await render(req)
+      const html = template
+        .replace(`<!--ssr-outlet-->`, appHtml)
+        .replace(/<title>[^<]*<\/title>/, helmet.title.toString())
+      res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
+    } catch (err) {
+      next(err)
+    }
+  })
+  return app
 }
 
-
 async function createDevServer() {
-    const app = express();
-    const vite = await (await import('vite')).createServer({
-        server: { middlewareMode: 'ssr' },
-        appType: 'custom',
-    });
-    app.use(vite.middlewares);
+  const app = express()
+  const vite = await (
+    await import('vite')
+  ).createServer({
+    server: { middlewareMode: 'ssr' },
+    appType: 'custom',
+  })
+  app.use(vite.middlewares)
 
-    app.use('*', async (req, res, next) => {
-        if (req.originalUrl === '/sitemap.xml') {
-          const sitemap = await generateSitemap()
-          return res
-            .status(200)
-            .set({ 'Content-Type': 'application/xml' })
-            .end(sitemap)
-        }
-        try {
-            const templateHtml = fs.readFileSync(
-                path.resolve(__dirname, 'index.html'),
-                'utf-8'
-            )
-            const template = await vite.transformIndexHtml(
-                req.originalUrl,
-                templateHtml
-            )
-            const { render } = await vite.ssrLoadModule('/src/entry-server.jsx');
-            const appHtml = await render(req);
-            const html = template.replace(`<!--ssr-outlet-->`, appHtml);
-            res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
-        } catch (err) {
-            vite.ssrFixStacktrace(err);
-            next(err)
-        }
-    })
-    return app
+  app.use('*', async (req, res, next) => {
+    if (req.originalUrl === '/sitemap.xml') {
+      const sitemap = await generateSitemap()
+      return res
+        .status(200)
+        .set({ 'Content-Type': 'application/xml' })
+        .end(sitemap)
+    }
+    try {
+      const templateHtml = fs.readFileSync(
+        path.resolve(__dirname, 'index.html'),
+        'utf-8',
+      )
+      const template = await vite.transformIndexHtml(
+        req.originalUrl,
+        templateHtml,
+      )
+      const { render } = await vite.ssrLoadModule('/src/entry-server.jsx')
+      const { html: appHtml, helmet } = await render(req)
+      const html = template
+        .replace(`<!--ssr-outlet-->`, appHtml)
+        .replace(/<title>[^<]*<\/title>/, helmet.title.toString())
+      res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
+    } catch (err) {
+      vite.ssrFixStacktrace(err)
+      next(err)
+    }
+  })
+  return app
 }
 
 if (process.env.NODE_ENV === 'production') {
-    const app = await createProdServer();
-    app.listen(process.env.PORT, () => {
-        console.log(`SSR Prod Server running at http://localhost:${process.env.PORT}`);
-    })
+  const app = await createProdServer()
+  app.listen(process.env.PORT, () => {
+    console.log(
+      `SSR Prod Server running at http://localhost:${process.env.PORT}`,
+    )
+  })
 } else {
-    const app = await createDevServer();
-    app.listen(process.env.PORT, () => {
-        console.log(`SSR Dev Server running at http://localhost:${process.env.PORT}`);
-    })
+  const app = await createDevServer()
+  app.listen(process.env.PORT, () => {
+    console.log(
+      `SSR Dev Server running at http://localhost:${process.env.PORT}`,
+    )
+  })
 }
