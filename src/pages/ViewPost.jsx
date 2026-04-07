@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Header } from '../components/Header';
 import { Post } from '../components/Post';
+import { PostStats } from '../components/PostStats';
 import { getPostById } from '../api/posts';
 import { getUserInfo } from '../api/users';
 import { postTrackEvent } from '../api/events';
@@ -63,7 +64,14 @@ export function ViewPost({ postId }) {
             <Link to="/">Back to home</Link>
             <br />
             <hr />
-            {post ? <Post {...post} fullPost /> : `Post with id: ${postId} not found.`}
+            {post ? (
+                <div>
+                    <Post {...post} fullPost />
+                    <hr />
+                    <PostStats postId={postId} />
+                </div>
+            ) : `Post with id: ${postId} not found.`}
+            
         </div>
     )
 } 
