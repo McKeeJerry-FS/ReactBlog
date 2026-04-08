@@ -6,7 +6,7 @@ export const mutationSchema = `
   type Mutation {
     signupUser(username: String!, password: String!): User
     loginUser(username: String!, password: String!): String
-    createPost(title: String!, contents: String!, tags: [String!]): Post
+    createPost(title: String!, contents: String, tags: [String!]): Post
   }
 `
 
@@ -16,7 +16,8 @@ export const mutationResolver = {
       return await createUser({ username, password })
     },
     loginUser: async (parent, { username, password }) => {
-      return await loginUser({ username, password })
+      const { token } = await loginUser({ username, password })
+      return token
     },
     createPost: async (parent, { title, contents, tags }, { auth }) => {
       if (!auth) {
@@ -29,7 +30,7 @@ export const mutationResolver = {
           },
         )
       }
-      return await createPost(auth.sub, { title, contents, tags })
+      return await createPost(auth.sub, { title, content: contents, tags })
     },
   },
 }

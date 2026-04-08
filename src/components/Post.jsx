@@ -7,25 +7,29 @@ export function Post({ title, contents, author, id, fullPost = false }) {
   return (
     <article>
       {fullPost ? (
-        <h3>{title}</h3>
+        <h2 className='card-title mb-3'>{title}</h2>
       ) : (
-        <Link to={`/posts/${id}/${slug(title)}`}>
-          <h3>{title}</h3>
+        <Link
+          to={`/posts/${id}/${slug(title)}`}
+          className='text-decoration-none'
+        >
+          <h5 className='card-title text-primary mb-2'>{title}</h5>
         </Link>
       )}
-      {fullPost && <div>{contents}</div>}
+      {fullPost && <p className='card-text text-body mb-3'>{contents}</p>}
       {author && (
-        <em>
-          {fullPost && <br />}
-          Written by{' '}
-          <strong>
-            {typeof author === 'object' ? (
-              author.username
-            ) : (
-              <User id={author} />
-            )}
-          </strong>
-        </em>
+        <p className='card-text'>
+          <small className='text-body-secondary'>
+            Written by{' '}
+            <strong>
+              {typeof author === 'object' ? (
+                author.username
+              ) : (
+                <User id={author} />
+              )}
+            </strong>
+          </small>
+        </p>
       )}
     </article>
   )

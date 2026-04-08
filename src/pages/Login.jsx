@@ -9,7 +9,7 @@ export function Login() {
   const [password, setPassword] = useState('')
 
   const navigate = useNavigate()
-  const [, setToken] = useAuth()
+  const { setToken } = useAuth()
 
   const [loginUser, { loading }] = useGraphQLMutation(LOGIN_USER, {
     variables: { username, password },
