@@ -3,7 +3,7 @@ import { Blog } from './pages/Blog'
 import { Signup } from './pages/Signup'
 import { Login } from './pages/Login'
 import { ViewPost } from './pages/ViewPost'
-import { getPosts, getPostById } from './api/posts'
+import { getPostById } from './api/posts'
 import {
   QueryClient,
   dehydrate,
@@ -14,34 +14,8 @@ import { getUserInfo } from './api/users'
 export const routes = [
   {
     path: '/',
-    loader: async () => {
-      const queryClient = new QueryClient()
-      const author = ''
-      const sortBy = 'createdAt'
-      const sortOrder = 'descending'
-      const posts = await getPosts({ author, sortBy, sortOrder })
-      await queryClient.prefetchQuery({
-        queryKey: ['posts', { author, sortBy, sortOrder }],
-        queryFn: () => posts,
-      })
-      const uniqueAuthors = posts
-        .map((post) => post.author)
-        .filter((value, index, array) => array.indexOf(value) === index)
-      for (const userId of uniqueAuthors) {
-        await queryClient.prefetchQuery({
-          queryKey: ['user', userId],
-          queryFn: () => getUserInfo(userId),
-        })
-      }
-      return dehydrate(queryClient)
-    },
     Component() {
-      const dehydratedState = useLoaderData()
-      return (
-        <HydrationBoundary state={dehydratedState}>
-          <Blog />
-        </HydrationBoundary>
-      )
+      return <Blog />
     },
   },
   {

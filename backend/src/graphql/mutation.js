@@ -11,23 +11,25 @@ export const mutationSchema = `
 `
 
 export const mutationResolver = {
+  Mutation: {
     signupUser: async (parent, { username, password }) => {
-        return await createUser({username, password})
+      return await createUser({ username, password })
     },
     loginUser: async (parent, { username, password }) => {
-        return await loginUser({username, password})
+      return await loginUser({ username, password })
     },
-    createPost: async (parent, {title, contents, tags}, {auth}) => {
-        if (!auth) {
-            throw new GraphQLError(
-                'You need to be authorized to perform this action.',
-                {
-                    extensions: {
-                        code: 'UNAUTHORIZED',
-                    },
-                },
-            )
-        }
-        return await createPost(auth.sub, {title, contents, tags})
-    }
+    createPost: async (parent, { title, contents, tags }, { auth }) => {
+      if (!auth) {
+        throw new GraphQLError(
+          'You need to be authorized to perform this action.',
+          {
+            extensions: {
+              code: 'UNAUTHORIZED',
+            },
+          },
+        )
+      }
+      return await createPost(auth.sub, { title, contents, tags })
+    },
+  },
 }

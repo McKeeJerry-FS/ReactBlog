@@ -1,56 +1,57 @@
-import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { useNavigate, Link } from 'react-router-dom';
-import { signup } from '../api/users';
+import { useState } from 'react'
+import { useMutation as useGraphQLMutation } from '@apollo/client/react/index.js'
+import { useNavigate, Link } from 'react-router-dom'
+import { SIGNUP_USER } from '../api/graphql/users.js'
 
 export function Signup() {
-    const [ username, setUsername ] = useState('');
-    const [ password, setPassword ] = useState('');
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
-    const navigate = useNavigate();
-    const signupMutation = useMutation({
-        mutationFn: () => signup({ username, password }),
-        onSuccess: () => navigate('/login'),
-        onError: () => alert('Signup failed'),
-    })
+  const navigate = useNavigate()
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        signupMutation.mutate()
-    }
+  const [signupUser, { loading }] = useGraphQLMutation(SIGNUP_USER, {
+    variables: { username, password },
+    onCompleted: () => navigate('/login'),
+    onError: () => alert('failed to sign up!'),
+  })
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <Link to='/'>Back to Blog</Link>
-            <hr />
-            <br />
-        <div>
-            <label htmlFor='create-username'>Username: </label>
-            <input
-            type='text'
-            name='create-username'
-            id='create-username'
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            />
-        </div>
-        <br />
-        <div>
-            <label htmlFor='create-password'>Password: </label>
-            <input
-            type='password'
-            name='create-password'
-            id='create-password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            />
-        </div>
-        <br />
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    signupUser()
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Link to='/'>Back to main page</Link>
+      <hr />
+      <br />
+      <div>
+        <label htmlFor='create-username'>Username: </label>
         <input
-            type='submit'
-            value={signupMutation.isPending ? 'Signing up...' : 'Sign Up'}
-            disabled={!username || !password || signupMutation.isPending}
+          type='text'
+          name='create-username'
+          id='create-username'
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
-        </form>
-    )
+      </div>
+      <br />
+      <div>
+        <label htmlFor='create-password'>Password: </label>
+        <input
+          type='password'
+          name='create-password'
+          id='create-password'
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
+      <br />
+      <input
+        type='submit'
+        value={loading ? 'Signing up...' : 'Sign Up'}
+        disabled={!username || !password || loading}
+      />
+    </form>
+  )
 }

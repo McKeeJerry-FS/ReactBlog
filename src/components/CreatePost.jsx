@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { useAuth } from '../contexts/AuthContect'
+import { useAuth } from '../contexts/AuthContext'
 import { createPost } from '../api/posts'
 
 export function CreatePost() {
