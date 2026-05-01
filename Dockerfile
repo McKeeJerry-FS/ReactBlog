@@ -1,5 +1,6 @@
 FROM node:20 AS build
 ARG VITE_BACKEND_URL=http://localhost:3000/api/v1
+ARG VITE_GRAPHQL_URL=http://localhost:3000/graphql
 WORKDIR /build
 COPY package.json .
 RUN npm install --ignore-scripts --package-lock=false

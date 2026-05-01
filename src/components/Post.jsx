@@ -3,7 +3,14 @@ import { Link } from 'react-router-dom'
 import slug from 'slug'
 import { User } from './User.jsx'
 
-export function Post({ title, contents, author, id, fullPost = false }) {
+export function Post({
+  title,
+  contents,
+  author,
+  id,
+  imageUrl,
+  fullPost = false,
+}) {
   return (
     <article>
       {fullPost ? (
@@ -16,7 +23,21 @@ export function Post({ title, contents, author, id, fullPost = false }) {
           <h5 className='card-title text-primary mb-2'>{title}</h5>
         </Link>
       )}
-      {fullPost && <p className='card-text text-body mb-3'>{contents}</p>}
+      {imageUrl && (
+        <img
+          src={imageUrl}
+          alt={title}
+          className={`img-fluid rounded mb-3${fullPost ? '' : ' w-100'}`}
+          style={fullPost ? undefined : { maxHeight: 240, objectFit: 'cover' }}
+          loading='lazy'
+        />
+      )}
+      {fullPost && (
+        <div
+          className='card-text text-body mb-3'
+          dangerouslySetInnerHTML={{ __html: contents || '' }}
+        />
+      )}
       {author && (
         <p className='card-text'>
           <small className='text-body-secondary'>
@@ -37,8 +58,14 @@ export function Post({ title, contents, author, id, fullPost = false }) {
 
 Post.propTypes = {
   title: PropTypes.string.isRequired,
-  contents: PropTypes.shape(User.propTypes),
-  author: PropTypes.string,
+  contents: PropTypes.string,
+  author: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      username: PropTypes.string,
+    }),
+  ]),
   id: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string,
   fullPost: PropTypes.bool,
 }

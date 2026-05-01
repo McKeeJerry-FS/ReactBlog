@@ -1,3 +1,214 @@
+/* TipTap Editor */
+.tiptap-wrapper {
+  border: 1px solid #d7dee7;
+  border-radius: 0.875rem;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fdfefe 0%, #f7f9fc 100%);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.tiptap-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 0.8rem;
+  background: linear-gradient(180deg, #f9fbfd 0%, #eef3f8 100%);
+  border-bottom: 1px solid #d7dee7;
+}
+
+.tiptap-toolbar button {
+  appearance: none;
+  border: 1px solid #d3dbe5;
+  border-radius: 999px;
+  background: #ffffff;
+  padding: 0.38rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #334155;
+  line-height: 1.4;
+  min-width: 2.5rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.tiptap-toolbar button:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+  transform: translateY(-1px);
+}
+
+.tiptap-toolbar button.active {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #f8fafc;
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.16);
+}
+
+.tiptap-toolbar button:disabled {
+  opacity: 0.45;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+}
+
+.tiptap-toolbar-sep {
+  width: 1px;
+  background: #d7dee7;
+  margin: 0.15rem 0.25rem;
+  align-self: stretch;
+}
+
+.tiptap-editor {
+  display: flex;
+  padding: 1rem 1.1rem;
+  min-height: 18rem;
+  background: #fff;
+  color: #212529;
+}
+
+.tiptap-editor .tiptap-input {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  outline: none;
+  min-height: calc(1.7em * 10);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #1f2937;
+  text-align: left;
+}
+
+.tiptap-editor .tiptap-input p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #94a3b8;
+  font-style: italic;
+  pointer-events: none;
+  height: 0;
+}
+
+.tiptap-editor .tiptap-input > * + * {
+  margin-top: 0.8rem;
+}
+
+.tiptap-editor .tiptap-input p {
+  margin: 0;
+}
+
+.tiptap-editor .tiptap-input h2 {
+  font-size: 1.5rem;
+  line-height: 1.25;
+  color: #0f172a;
+  margin: 1.2rem 0 0.45rem;
+}
+
+.tiptap-editor .tiptap-input h3 {
+  font-size: 1.2rem;
+  line-height: 1.3;
+  color: #1e293b;
+  margin: 1rem 0 0.4rem;
+}
+
+.tiptap-editor .tiptap-input ul,
+.tiptap-editor .tiptap-input ol {
+  padding-left: 1.4rem;
+  margin: 0;
+}
+
+.tiptap-editor .tiptap-input li + li {
+  margin-top: 0.3rem;
+}
+
+.tiptap-editor .tiptap-input blockquote {
+  border-left: 4px solid #cbd5e1;
+  margin: 1rem 0;
+  padding: 0.15rem 0 0.15rem 1rem;
+  color: #475569;
+  background: linear-gradient(90deg, rgba(241, 245, 249, 0.9), transparent);
+}
+
+.tiptap-editor .tiptap-input img,
+.card-text img {
+  max-width: 100% !important;
+  width: min(500px, 100%) !important;
+  height: auto !important;
+  display: block;
+  border-radius: 0.75rem;
+  margin: 1rem auto;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+}
+
+.tiptap-editor .tiptap-input img[data-size='small'],
+.card-text img[data-size='small'] {
+  width: min(200px, 40%) !important;
+}
+
+.tiptap-editor .tiptap-input img[data-size='medium'],
+.card-text img[data-size='medium'] {
+  width: min(350px, 70%) !important;
+}
+
+.tiptap-editor .tiptap-input img[data-size='full'],
+.card-text img[data-size='full'] {
+  width: min(500px, 100%) !important;
+}
+
+.tiptap-editor .tiptap-input img[data-align='left'],
+.card-text img[data-align='left'] {
+  float: left !important;
+  margin: 0.25rem 1rem 0.5rem 0 !important;
+}
+
+.tiptap-editor .tiptap-input img[data-align='right'],
+.card-text img[data-align='right'] {
+  float: right !important;
+  margin: 0.25rem 0 0.5rem 1rem !important;
+}
+
+.tiptap-editor .tiptap-input img[data-align='center'],
+.card-text img[data-align='center'] {
+  float: none !important;
+  margin: 1rem auto !important;
+}
+
+.tiptap-editor .tiptap-input a {
+  color: #0f62fe;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.15em;
+}
+
+@media (max-width: 640px) {
+  .tiptap-toolbar {
+    gap: 0.35rem;
+    padding: 0.65rem;
+  }
+
+  .tiptap-toolbar button {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.78rem;
+  }
+
+  .tiptap-editor {
+    padding: 0.9rem;
+    min-height: 15rem;
+  }
+
+  .tiptap-editor .tiptap-input {
+    min-height: calc(1.7em * 8);
+  }
+}
+
+/* End TipTap Editor */
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

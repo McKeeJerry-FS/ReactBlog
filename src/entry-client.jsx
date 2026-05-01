@@ -4,10 +4,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { App } from './App.jsx'
 import { routes } from './routes.jsx'
 import { HelmetProvider } from 'react-helmet-async'
+import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
-const router = createBrowserRouter(routes)
+const router = createBrowserRouter(routes, {
+  hydrationData: window.__staticRouterHydrationData,
+})
 
 ReactDOM.hydrateRoot(
   document.getElementById('root'),

@@ -4,16 +4,23 @@ import { expressMiddleware } from '@apollo/server/express4'
 import { optionalAuth } from './middleware/jwt.js'
 import { typeDefs, resolvers } from './graphql/index.js'
 import { postsRoutes } from './routes/posts.js'
+import { galleryRoutes } from './routes/gallery.js'
 import { userRoutes } from './routes/users.js'
 import { eventRoutes } from './routes/events.js'
 import bodyParser from 'body-parser'
 import cors from 'cors'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const app = express()
 app.use(cors())
 app.use(bodyParser.json())
+app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')))
 
 postsRoutes(app)
+galleryRoutes(app)
 userRoutes(app)
 eventRoutes(app)
 
@@ -26,14 +33,13 @@ app.get('/', (req, res) => {
   res.send('Hello World from Express!')
 })
 
-apolloServer
-  .start()
-  .then(() => app.use(
-    '/graphql', 
-    optionalAuth, 
+apolloServer.start().then(() =>
+  app.use(
+    '/graphql',
+    optionalAuth,
     expressMiddleware(apolloServer, {
       context: async ({ req }) => {
-        return { auth: req.auth}
+        return { auth: req.auth }
       },
     }),
   ),

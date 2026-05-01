@@ -29,6 +29,7 @@ services:
       context: .
       args:
         - VITE_BACKEND_URL=http://localhost:3000/api/v1
+        - VITE_GRAPHQL_URL=http://localhost:3000/graphql
     ports:
       - '3001:8080'
     depends_on:

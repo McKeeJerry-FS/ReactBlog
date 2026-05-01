@@ -6,6 +6,7 @@ export const postSchema = `
     title: String!,
     author: User
     contents: String,
+    imageUrl: String,
     tags: [String!],
     createdAt: Float,
     updatedAt: Float

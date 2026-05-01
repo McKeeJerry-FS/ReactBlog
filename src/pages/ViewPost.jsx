@@ -47,6 +47,9 @@ export function ViewPost({ postId }) {
           <meta name='description' content={truncate(post.content)} />
           <meta property='og:type' content='article' />
           <meta property='og:title' content={post.title} />
+          {post.imageUrl && (
+            <meta property='og:image' content={post.imageUrl} />
+          )}
           <meta property='og:article:published_time' content={post.createdAt} />
           <meta property='og:article:modified_time' content={post.updatedAt} />
           <meta property='og:article:author' content={userInfo.name} />
@@ -63,7 +66,12 @@ export function ViewPost({ postId }) {
         {post ? (
           <div className='card shadow-sm'>
             <div className='card-body p-4'>
-              <Post {...post} id={post.id} fullPost />
+              <Post
+                {...post}
+                id={post.id ?? post._id}
+                contents={post.contents ?? post.content}
+                fullPost
+              />
               <hr />
               <PostStats postId={postId} />
             </div>

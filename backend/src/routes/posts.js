@@ -9,7 +9,6 @@ import {
 } from '../services/posts.js'
 import { requireAuth } from '../middleware/jwt.js'
 
-
 export function postsRoutes(app) {
   // GET Routes for posts
   app.get('/api/v1/posts', async (req, res) => {
@@ -54,6 +53,13 @@ export function postsRoutes(app) {
       const post = await createPost(userId, req.body)
       return res.status(201).json(post)
     } catch (err) {
+      if (
+        err.message === 'Image URL must be a valid URL' ||
+        err.message === 'Image URL must use http or https' ||
+        err.name === 'ValidationError'
+      ) {
+        return res.status(400).json({ error: err.message })
+      }
       console.error('Error creating post:', err)
       return res.status(500).end()
     }

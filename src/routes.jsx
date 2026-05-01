@@ -3,6 +3,7 @@ import { Blog } from './pages/Blog'
 import { Signup } from './pages/Signup'
 import { Login } from './pages/Login'
 import { ViewPost } from './pages/ViewPost'
+import { Gallery } from './pages/Gallery'
 import { getPostById } from './api/posts'
 import {
   QueryClient,
@@ -25,6 +26,10 @@ export const routes = [
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/gallery',
+    element: <Gallery />,
   },
   {
     path: '/posts/:postId/:slug?',

@@ -50,6 +50,24 @@ describe('Post Service', () => {
     const createdPost = await createPost(primaryUser._id, post)
     expect(createdPost._id).toBeInstanceOf(mongoose.Types.ObjectId)
   })
+
+  test('with imageUrl should save the imageUrl', async () => {
+    const post = {
+      title: 'Post with image',
+      imageUrl: 'https://images.example.com/reef.jpg',
+    }
+    const createdPost = await createPost(primaryUser._id, post)
+    expect(createdPost.imageUrl).toEqual(post.imageUrl)
+  })
+
+  test('with invalid imageUrl should fail', async () => {
+    await expect(
+      createPost(primaryUser._id, {
+        title: 'Invalid image',
+        imageUrl: 'not-a-valid-url',
+      }),
+    ).rejects.toThrow('Image URL must be a valid URL')
+  })
 })
 
 // Additional tests for listing and getting posts

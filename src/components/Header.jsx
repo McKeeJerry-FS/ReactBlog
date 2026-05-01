@@ -20,7 +20,7 @@ export function Header() {
     <nav className='navbar navbar-expand-md bg-body-tertiary shadow-sm sticky-top'>
       <div className='container'>
         <Link className='navbar-brand fw-bold fs-4' to='/'>
-          ✏️ ReactBlog
+          🪸 New England Reefer
         </Link>
         <button
           className='navbar-toggler'
@@ -35,6 +35,14 @@ export function Header() {
         </button>
         <div className='collapse navbar-collapse' id='main-nav'>
           <ul className='navbar-nav ms-auto align-items-md-center gap-2'>
+            <li className='nav-item'>
+              <Link
+                className={`btn btn-outline-dark btn-sm${location.pathname === '/gallery' ? ' active' : ''}`}
+                to='/gallery'
+              >
+                Gallery
+              </Link>
+            </li>
             {token && userInfo ? (
               <>
                 <li className='nav-item'>
